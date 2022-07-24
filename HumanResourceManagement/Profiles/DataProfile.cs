@@ -11,6 +11,7 @@ namespace HumanResourceManagement.Profiles
         {
             CreateMap<EmployeeDto, Employee>();
             CreateMap<Employee, EmployeeEditRequestDto>();
+            CreateMap<Employee, UserDto>();
         }
     }
 }

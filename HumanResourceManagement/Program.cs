@@ -1,8 +1,12 @@
+using HumanResourceManagement.AuthenticationUtils;
 using HumanResourceManagement.Data;
 using HumanResourceManagement.Interfaces;
 using HumanResourceManagement.Repository;
 using HumanResourceManagement.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +16,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<HrOperationsService>();
+builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<HomeService>();
 builder.Services.AddTransient<IEmployeeReposistory, EmployeeReposistory>();
+builder.Services.AddSingleton<IJwtTokenManager, JwtTokenManager>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT:key"]);
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
 
 builder.Services.AddDbContextPool<ManagementContext>(options =>
 {
@@ -30,8 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

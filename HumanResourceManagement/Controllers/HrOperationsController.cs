@@ -21,7 +21,7 @@ namespace HumanResourceManagement.Controllers
         }
 
         [HttpPost("add")]
-        //[Authorize(Roles = "hr")]
+        [Authorize(Roles = "hr")]
         public IActionResult AddEmployeeDetails(EmployeeDto employee)
         {
             if (!ModelState.IsValid)
@@ -32,13 +32,24 @@ namespace HumanResourceManagement.Controllers
             var employeeData = _mapper.Map<EmployeeDto, Employee>(employee);
             employeeData.Roles.ToLower();
 
-            _hrOperationsService.AddEmployee(employeeData);
+            try
+            {
+                _hrOperationsService.AddEmployee(employeeData);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return Problem("unable to process your request please try again later");
+            }
 
             return Ok();
         }
 
         [HttpDelete("delete/{id}")]
-        //[Authorize(Roles = "hr")]
+        [Authorize(Roles = "hr")]
         public IActionResult DeleteEmployee(int id)
         {
             try
@@ -58,9 +69,13 @@ namespace HumanResourceManagement.Controllers
         }
 
         [HttpPost("update/{id}")]
-        //[Authorize(Roles = "hr")]
+        [Authorize(Roles = "hr")]
         public IActionResult EditEmployeeDetails(int id, EmployeeEditRequestDto employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("user data is not valid");
+            }
 
             try
             {
@@ -84,7 +99,7 @@ namespace HumanResourceManagement.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(Roles = "hr")]
+        [Authorize(Roles = "hr")]
         public IActionResult GetEmployeeById(int id)
         {
             var employee = _hrOperationsService.GetEmployee(id);

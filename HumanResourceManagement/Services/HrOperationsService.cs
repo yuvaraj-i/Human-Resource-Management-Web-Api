@@ -15,6 +15,14 @@ namespace HumanResourceManagement.Services
 
         public void AddEmployee(Employee employee)
         {
+            var employeeByEmail = _employeeReposistory.FindEmployeeByEmail(employee.Email);
+            var employeeByPhoneNumber = _employeeReposistory.FindEmployeeByPhoneNumber(employee.PhoneNumber);
+
+            if (employeeByEmail != null || employeeByPhoneNumber != null)
+            {
+                throw new ArgumentException($"user data already exits");
+            }
+
             _employeeReposistory.AddEmployee(employee);
         }
 
@@ -44,13 +52,15 @@ namespace HumanResourceManagement.Services
                 throw new ArgumentException($"user with id:{id} not found");
             }
 
-            if (employee.Roles.ToLower().Equals("hr"))
+            if (employee.Roles.ToLower().Equals("hr") & employeeUpdateData.Roles.ToLower().Equals("hr") == false)
             {
                 throw new InvalidDataException("can't update role of other HR");
             }
 
             employee.FisrtName = employeeUpdateData.FisrtName;
             employee.LastName = employeeUpdateData.LastName;
+            employee.PhoneNumber = employeeUpdateData.PhoneNumber;
+            employee.Email = employeeUpdateData.Email;
             employee.DateOfJoining = employeeUpdateData.DateOfJoining;
             employee.CompanyLocation = employeeUpdateData.CompanyLocation;
             employee.WorkingStatus = employeeUpdateData.WorkingStatus;

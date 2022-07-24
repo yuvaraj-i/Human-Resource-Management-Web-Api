@@ -35,5 +35,19 @@ namespace HumanResourceManagement.Repository
             managementContext.Employees.Add(employee);
             managementContext.SaveChanges();
         }
+
+        public Employee? FindEmployeeByEmail(string email)
+        {
+            var employee = managementContext.Employees.Where(x => x.Email == email).FirstOrDefault<Employee>();
+
+            return employee;
+        }
+
+        public Employee? FindEmployeeByPhoneNumber(string phoneNumber)
+        {
+            var employee = managementContext.Employees.Where(x => x.PhoneNumber == phoneNumber).FirstOrDefault<Employee>();
+
+            return employee;
+        }
     }
 }
