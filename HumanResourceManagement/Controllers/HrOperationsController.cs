@@ -24,7 +24,7 @@ namespace HumanResourceManagement.Controllers
         [Authorize(Roles = "hr")]
         public IActionResult AddEmployeeDetails(EmployeeDto employee)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest("user data is not valid");
             }

@@ -49,5 +49,10 @@ namespace HumanResourceManagement.Repository
 
             return employee;
         }
+
+        public void EditEmployeePersonalDetails(Employee employee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

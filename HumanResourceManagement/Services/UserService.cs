@@ -22,7 +22,20 @@ namespace HumanResourceManagement.Services
 
         public void EditUserProfile(UserDto user)
         {
-            throw new NotImplementedException();
+            var employee = new Employee()
+            {
+                Age = user.Age,
+                FisrtName = user.FisrtName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PermanentAddress = user.PermanentAddress,
+                PresentAddress = user.PresentAddress,
+                Gender = user.Gender,
+                DateOfBirth = user.DateOfBirth,
+                PhoneNumber = user.PhoneNumber,
+            };
+
+            _employeeReposistory.UpdateEmployee(employee);
         }
     }
 }

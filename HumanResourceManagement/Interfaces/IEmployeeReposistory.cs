@@ -10,5 +10,6 @@ namespace HumanResourceManagement.Interfaces
         public void AddEmployee(Employee employee);
         public Employee? FindEmployeeByEmail(string email);
         public Employee? FindEmployeeByPhoneNumber(string phoneNumber);
+        public void EditEmployeePersonalDetails(Employee employee);
     }
 }

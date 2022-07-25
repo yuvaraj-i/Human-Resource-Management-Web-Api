@@ -43,6 +43,11 @@ namespace HumanResourceManagement.Controllers
         [Authorize(Roles = "employee, hr")]
         public IActionResult EditProfile(UserDto user)
         {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest("user data is not valid");
+            }
+
             _userService.EditUserProfile(user);
             return Ok();
         }
